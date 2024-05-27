@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity^0.8.8;
 
-contract mappings{
+contract practice1{
     uint256 public std_id;
     string public std_name;
 
