@@ -146,15 +146,28 @@ contract todo{
 
     
 contract Assignment{
-    uint256 public std_id;
-    string public std_name;
 
-    mapping(uint256=> string) public id2name;
+    struct Student {
+        uint id;
+        string name;
+        string faculty;
+    }
 
-     function addstudent(uint256 _std_id, string memory _std_name) public{
-            std_id= _std_id;
-            std_name= _std_name;
-            id2name[_std_id]= _std_name;
-        }
-    
+    mapping(uint => Student) public students;
+
+    function create(uint _id, string memory _name, string memory _faculty) public {
+        students[_id] = Student(_id, _name, _faculty);
+    }
+
+    // Update student's details
+    function update(uint _id, string memory _name, string memory _faculty) public {
+        Student storage student = students[_id];
+        student.name = _name;
+        student.faculty = _faculty;
+    }
+
+    // Delete student's details
+    function deleteStudent(uint _id) public {
+        delete students[_id];
+    }
 }
