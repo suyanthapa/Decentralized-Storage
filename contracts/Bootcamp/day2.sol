@@ -46,7 +46,7 @@ contract array{
         string author_name;
         uint price;
     }
-    /*
+    
 book BookVar;
 
      function BookSet(uint256 _id, string memory _name, uint256 _price) public{
@@ -58,7 +58,7 @@ book BookVar;
 
     function getAll() public view returns (book memory){
         return BookVar;
-    }*/
+    }/*
 
      function BookSet(uint256 _id, string memory _name, uint256 _price) pure public{
         book memory boo;
@@ -169,5 +169,4 @@ contract Assignment{
     // Delete student's details
     function deleteStudent(uint _id) public {
         delete students[_id];
-    }
-}
+    }-*/}
