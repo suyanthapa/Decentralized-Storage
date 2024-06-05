@@ -49,7 +49,7 @@ contract array{
     
 book BookVar;
 
-     function BookSet(uint256 _id, string memory _name, uint256 _price) public{
+     function bookSet(uint256 _id, string memory _name, uint256 _price) public{
      BookVar= book(_id, _name, _price);
 }
     function getbookID() public view returns (uint){
