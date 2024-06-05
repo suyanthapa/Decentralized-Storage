@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity^0.8.8;
-
-
- 
-contract Assignment{
+contract Assignment1{
 
     struct Student {
         uint id;
@@ -18,7 +15,7 @@ contract Assignment{
     }
 
     // Update student's details
-    function update(uint _id, string memory _name, string memory _faculty) public {
+    function updateS(uint _id, string memory _name, string memory _faculty) public {
         Student storage student = students[_id];
         student.name = _name;
         student.faculty = _faculty;
