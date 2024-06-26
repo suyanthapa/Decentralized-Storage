@@ -79,7 +79,7 @@ function App() {
     <div >
       <Header connectWallet={connectWallet} disconnectWallet={disconnectWallet} account={account} />
       
-      <Hero name={name} getMyName={getMyName} contractInstance={contractInstance} />
+      {/* <Hero name={name} getMyName={getMyName} contractInstance={contractInstance} /> */}
       <SendMoney contractInstance={contractInstance} />
       <TransactionList transactions={transactions} />
     </div>

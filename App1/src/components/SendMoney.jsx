@@ -1,20 +1,42 @@
 import { useState } from "react";
+import { ethers } from "ethers";
 
 const SendMoney = ({ contractInstance }) => {
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleSendMoney = async () => {
+    setError(null);
+    setSuccess(null);
+
+    if (!ethers.utils.isAddress(address)) {
+      setError("Invalid recipient address");
+      return;
+    }
+
+    if (isNaN(amount) || Number(amount) <= 0) {
+      setError("Invalid amount");
+      return;
+    }
+
     if (contractInstance) {
+      setLoading(true);
       try {
         const transaction = await contractInstance.sendMoney(address, { value: ethers.utils.parseEther(amount) });
         await transaction.wait();
+        setSuccess("Transaction successful");
         console.log("Transaction successful:", transaction);
       } catch (error) {
         console.error("Error sending money:", error);
+        setError("Error sending money: " + error.message);
+      } finally {
+        setLoading(false);
       }
     } else {
-      console.log("Contract instance is not set");
+      setError("Contract instance is not set");
     }
   };
 
@@ -39,7 +61,15 @@ const SendMoney = ({ contractInstance }) => {
         type="text"
         className="border p-2 rounded ml-5"
       />
-      <button onClick={handleSendMoney} className="bg-black text-white px-3 py-2 rounded-md ml-5">Send Money</button>
+      <button
+        onClick={handleSendMoney}
+        className="bg-black text-white px-3 py-2 rounded-md ml-5"
+        disabled={loading}
+      >
+        {loading ? "Sending..." : "Send Money"}
+      </button>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {success && <p className="text-green-500 mt-2">{success}</p>}
     </div>
   );
 };

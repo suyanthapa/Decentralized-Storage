@@ -8,7 +8,7 @@ const Hero = ({ name, getMyName, contractInstance }) => {
   }
 
   return (
-    <div className="text-center text-2xl text-black font-bold mt-10">
+    <div className=" text-2xl text-black font-bold mt-10">
       <p className="">Name: {name}</p> {/* Display the current name */}
       <button
         onClick={getMyName} // Get name from the smart contract when clicked
@@ -21,12 +21,15 @@ const Hero = ({ name, getMyName, contractInstance }) => {
         <p>Set Name Function</p>
         <input
           onChange={(e) => setNewName(e.target.value)} // Set the new name input state
-          name="Address"
-          placeholder="Address"
+          name="Name"
+          placeholder="Name"
           required
           type="text"
+          className="border p-2 rounded"
         />
-        <button onClick={setMyName} className="bg-black text-white px-3 py-2 rounded-md ml-5">Set Name</button>
+        <button 
+        onClick={setMyName} 
+        className="bg-black text-white px-3 py-2 rounded-md ml-5">Set Name</button>
         {/* Set the new name in the smart contract when clicked */}
       </div>
     </div>

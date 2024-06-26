@@ -6,7 +6,7 @@ const Header = ({ connectWallet, disconnectWallet, account }) => {
 
   return (
     <div className="w-full h-full mx-auto flex items-center justify-between bg-gray-600 text-white py-5 px-5">
-      <h1 className="text-2xl font-bold">Name Changer</h1>
+      <h1 className="text-2xl font-bold">Crypto Bridge</h1>
       <div className="flex justify-between items-center gap-6">
       <div>
         <p>
