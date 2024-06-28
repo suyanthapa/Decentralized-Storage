@@ -4,18 +4,18 @@ import ABI from './constant/ABI.json';
 import Header from "./components/Header";
 import SendMoney from "./components/SendMoney";
 import TransactionList from "./components/TransactionList";
-import Hero from "./components/Hero"; // Importing the Hero component
+
+import UploadFiles from "./components/UploadFiles";
 
 function App() {
-  const [account, setAccount] = useState(null); // State to store the user's Ethereum account
-  const [contractInstance, setContractInstance] = useState(null); // State to store the contract instance
-  const [name, setName] = useState(''); // State to store the name fetched from the smart contract
-  const [transactions, setTransactions] = useState([]); // State to store the transactions
+  const [account, setAccount] = useState(null);
+  const [contractInstance, setContractInstance] = useState(null);
+  const [name, setName] = useState('');
+  const [transactions, setTransactions] = useState([]);
+  const [activeSection, setActiveSection] = useState('home'); // Set default active section to 'home'
 
-  const contractAddress = "0x7EC6291884b9Ad94ae2565a2635EE90894144D13"; // Replace with your deployed contract address
+  const contractAddress = "0x7EC6291884b9Ad94ae2565a2635EE90894144D13";
 
-
-  // Initialize Contract
   const initializeContract = async (account) => {
     if (window.ethereum) {
       try {
@@ -24,7 +24,6 @@ function App() {
         const contract = new ethers.Contract(contractAddress, ABI, signer);
         setContractInstance(contract);
 
-        // Listen for MoneySent events
         contract.on("MoneySent", (from, to, amount, timestamp) => {
           setTransactions((prevTransactions) => [
             ...prevTransactions,
@@ -39,7 +38,6 @@ function App() {
     }
   };
 
-  // Connect wallet
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -60,13 +58,11 @@ function App() {
     setTransactions([]);
   };
 
-  
-  // Fetching the Name from the Smart Contract
   const getMyName = async () => {
     if (contractInstance) {
       try {
-        const myName = await contractInstance.getName(); // Call the getName function from the smart contract
-        setName(myName); // Update the name state
+        const myName = await contractInstance.getName();
+        setName(myName);
       } catch (error) {
         console.error("Error getting name:", error);
       }
@@ -76,12 +72,27 @@ function App() {
   };
 
   return (
-    <div >
-      <Header connectWallet={connectWallet} disconnectWallet={disconnectWallet} account={account} />
-      
-      {/* <Hero name={name} getMyName={getMyName} contractInstance={contractInstance} /> */}
-      <SendMoney contractInstance={contractInstance} />
-      <TransactionList transactions={transactions} />
+    <div>
+      <Header
+        connectWallet={connectWallet}
+        disconnectWallet={disconnectWallet}
+        account={account}
+        setActiveSection={setActiveSection}
+        activeSection={activeSection} // Pass activeSection to Header
+      />
+
+      <div className="p-5">
+       
+
+        {activeSection === 'upload' && <UploadFiles />}
+
+        {activeSection === 'transfer' && (
+          <div>
+            <SendMoney contractInstance={contractInstance} />
+            <TransactionList transactions={transactions} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
