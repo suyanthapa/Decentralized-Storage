@@ -2,31 +2,39 @@ import React from 'react';
 
 const Header = ({ connectWallet, disconnectWallet, account, setActiveSection, activeSection }) => {
   return (
-    <div className="w-full h-full mx-auto flex items-center justify-between bg-gray-600 text-white py-5 px-5">
-      <nav className="mx-auto flex items-center flex-row">
-        <ul className="flex space-x-4">
-          
-          <li>
-            <button
-              className={`bg-zinc-500 py-3 px-5 rounded-md hover:bg-zinc-800 ${activeSection === 'upload' && 'bg-zinc-800'}`}
-              onClick={() => setActiveSection('upload')} // Set the active section to 'upload'
-            >
-              Upload Health Records
-            </button>
-          </li>
-          <li>
-            <button
-              className={`bg-zinc-500 py-3 px-5 rounded-md hover:bg-zinc-800 ${activeSection === 'transfer' && 'bg-zinc-800'}`}
-              onClick={() => setActiveSection('transfer')} // Set the active section to 'transfer'
-            >
-              Transfer Money
-            </button>
-          </li>
-        </ul>
+    <header className="bg-cyan-900 p-4 flex justify-between items-center">
+      <div className="text-white text-lg font-bold">DataChain</div>
+      <nav>
+        <button
+          className={`text-white mx-2 ${activeSection === 'home' ? 'underline' : ''}`}
+          onClick={() => setActiveSection('home')}
+        >
+          Home
+        </button>
+        <button
+          className={`text-white mx-2 ${activeSection === 'upload' ? 'underline' : ''}`}
+          onClick={() => setActiveSection('upload')}
+        >
+          Upload File
+        </button>
+        <button
+          className={`text-white mx-2 ${activeSection === 'transfer' ? 'underline' : ''}`}
+          onClick={() => setActiveSection('transfer')}
+        >
+          Transfer Money
+        </button >
+       
+        <button
+       className='text-white mx-2'>
+          About
+        </button>
+        <button
+        className='text-white mx-2'>
+          Contact
+          </button>
       </nav>
-
       <div className="flex justify-between items-center gap-6">
-        <div>
+        <div className='text-white'>
           <p>
             Address: {account ? `${account.slice(0, 6)}....${account.slice(-4)}` : "Not connected"}
           </p>
@@ -35,20 +43,22 @@ const Header = ({ connectWallet, disconnectWallet, account, setActiveSection, ac
         {account ? (
           <button
             onClick={disconnectWallet}
-            className="bg-red-400 py-3 px-5 rounded-md hover:bg-red-600"
+            className="bg-red-400 py-3 px-5 rounded-md hover:bg-red-600 text-white"
           >
             Disconnect
           </button>
         ) : (
           <button
             onClick={connectWallet}
-            className="bg-blue-400 py-3 px-5 rounded-md hover:bg-blue-600"
+            className="bg-blue-400 py-3 px-5 rounded-md hover:bg-blue-600 text-white"
           >
             Connect
           </button>
+          
         )}
       </div>
-    </div>
+    
+    </header>
   );
 };
 

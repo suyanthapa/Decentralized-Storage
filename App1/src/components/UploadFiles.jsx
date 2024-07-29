@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 
-const UploadFiles = ({ account }) => {
+const UploadFiles = ({ contractInstance, account }) => {
   const [hospital, setHospital] = useState('');
   const [addresses, setAddresses] = useState(['']);
   const [file, setFile] = useState(null);
+  const [message, setMessage] = useState('');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  const handleUpload = () => {
-    // Implement the logic to upload to the blockchain
-    console.log('Uploading to blockchain:', { account, hospital, file, addresses });
+  const handleUpload = async () => {
+    if (!account || !hospital || !file || addresses.length === 0) {
+      setMessage('Please fill in all the fields.');
+      return;
+    }
+
+    const fileHash = file.name; // For simplicity, using the file name here; you should use a real hash function like SHA-256
+
+    try {
+      const tx = await contractInstance.uploadRecord(hospital, fileHash);
+      await tx.wait();
+
+      setMessage('Record uploaded successfully!');
+    } catch (error) {
+      console.error("Error uploading record:", error);
+      setMessage('Error uploading record. See console for details.');
+    }
   };
 
   const handleAddAddress = () => {
@@ -30,9 +45,8 @@ const UploadFiles = ({ account }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
+    <div className="flex justify-center items-center h-screen bg-cyan-950">
       <div className="bg-gray-800 p-10 rounded-lg shadow-lg w-3/4 max-w-9xl flex">
-        {/* Main Data Section */}
         <div className="w-3/5 pr-5">
           <h2 className="text-2xl font-bold text-center mb-5 text-white">Upload Health Records</h2>
           <form className="space-y-5">
@@ -63,6 +77,11 @@ const UploadFiles = ({ account }) => {
                 className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-700 text-white"
               />
             </div>
+            {message && (
+              <div className="text-red-500 text-center">
+                {message}
+              </div>
+            )}
             <button
               type="button"
               onClick={handleUpload}
@@ -72,8 +91,7 @@ const UploadFiles = ({ account }) => {
             </button>
           </form>
         </div>
-        {/* Share Access Section */}
-        <div className="w-2/5 pl-5 bg-gray-900 p-5 rounded-lg">
+        <div className="w-2/5 pl-5 bg-gray-700 p-5 rounded-lg">
           <h2 className="text-2xl font-bold text-center mb-5 text-white">Share Access</h2>
           {addresses.map((address, index) => (
             <div key={index} className="flex items-center mb-2">
@@ -81,24 +99,24 @@ const UploadFiles = ({ account }) => {
                 type="text"
                 value={address}
                 onChange={(e) => handleAddressChange(index, e.target.value)}
-                placeholder="Enter Address"
-                className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-700 text-white"
+                placeholder="Recipient Address"
+                className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-800 text-white"
               />
               <button
                 type="button"
                 onClick={() => handleRemoveAddress(index)}
-                className="ml-2 text-white bg-red-600 hover:bg-red-700 p-2 rounded"
+                className="ml-2 bg-red-600 text-white p-2 rounded hover:bg-red-700"
               >
-                &times;
+                Remove
               </button>
             </div>
           ))}
           <button
             type="button"
-            className="px-2 py-1 mt-2 text-sm border border-blue-500 bg-blue-600 text-white rounded"
             onClick={handleAddAddress}
+            className="w-full bg-green-600 text-white p-2 rounded mt-3 hover:bg-green-700"
           >
-            +
+            Add Address
           </button>
         </div>
       </div>

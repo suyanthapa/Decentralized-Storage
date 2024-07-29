@@ -1,0 +1,7 @@
+/* In your global CSS file (e.g., styles.css) */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
