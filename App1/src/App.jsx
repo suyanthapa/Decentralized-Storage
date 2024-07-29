@@ -72,7 +72,7 @@ function App() {
         activeSection={activeSection}
       />
 
-      <div className="p-5">
+      <div >
         {activeSection === 'home' && <Homepage />}
         {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} />}
         {activeSection === 'transfer' && (

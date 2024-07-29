@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import homeImage from '../assets/home.jpg';
 
 const UploadFiles = ({ contractInstance, account }) => {
   const [hospital, setHospital] = useState('');
@@ -45,7 +46,13 @@ const UploadFiles = ({ contractInstance, account }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-cyan-950">
+    <div className="flex justify-center items-center h-screen " style={{
+      backgroundImage: `url(${homeImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '657px',
+      }}>
+      
       <div className="bg-gray-800 p-10 rounded-lg shadow-lg w-3/4 max-w-9xl flex">
         <div className="w-3/5 pr-5">
           <h2 className="text-2xl font-bold text-center mb-5 text-white">Upload Health Records</h2>
