@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import SendMoney from "./components/SendMoney";
 import TransactionList from "./components/TransactionList";
 import UploadFiles from "./components/UploadFiles";
+import RetrieveFiles from "./components/RetrieveFiles";
 import Homepage from "./components/Homepage";
 
 function App() {

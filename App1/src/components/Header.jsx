@@ -19,10 +19,12 @@ const Header = ({ connectWallet, disconnectWallet, account, setActiveSection, ac
         </button>
 
         <button
-          className={`text-white mx-2 ${activeSection ==='retreive' ? 'underline' : ''}`}
-          onClick={() => setActiveSection('retireve')}
-          >
+          className={`text-white mx-2 ${activeSection === 'retrieve' ? 'underline' : ''}`}
+          onClick={() => setActiveSection('retrieve')}
+        >
+          Retrieve File
         </button>
+
         <button
           className={`text-white mx-2 ${activeSection === 'transfer' ? 'underline' : ''}`}
           onClick={() => setActiveSection('transfer')}
@@ -58,7 +60,7 @@ const Header = ({ connectWallet, disconnectWallet, account, setActiveSection, ac
             onClick={connectWallet}
             className="bg-blue-400 py-3 px-5 rounded-md hover:bg-blue-600 text-white"
           >
-            Connect
+            Connect with Metamask
           </button>
           
         )}

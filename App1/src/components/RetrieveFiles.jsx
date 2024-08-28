@@ -1,20 +1,11 @@
-import 'react', { useState } from 'react';
+import React, { useState } from 'react';
 
-
-
-const RetrieveFiles = (account, contractInstance) => {
-
-
-
-
-
-
+const RetrieveFiles = ({ contractInstance, account }) => {
   return (
     <div>
-      
+      <p>he</p>
     </div>
   )
 }
 
 export default RetrieveFiles
-
