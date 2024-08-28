@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from 'react';
 import homeImage from '../assets/home.jpg';
 
@@ -6,6 +7,7 @@ const UploadFiles = ({ contractInstance, account }) => {
   const [addresses, setAddresses] = useState(['']);
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -17,9 +19,25 @@ const UploadFiles = ({ contractInstance, account }) => {
       return;
     }
 
-    const fileHash = file.name; // For simplicity, using the file name here; you should use a real hash function like SHA-256
+    setLoading(true); // Start loading
 
     try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const pinataFile = await axios({
+        method: "post",
+        url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        data: formData,
+        headers: {
+          pinata_api_key: '3be859278a67509a7170',
+          pinata_secret_api_key: '56e431e9bf7748944ee97fa8de26d9a409769982cfb1822f63c531975785946a',
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const fileHash = `ipfs://${pinataFile.data.IpfsHash}`;
+
       const tx = await contractInstance.uploadRecord(hospital, fileHash);
       await tx.wait();
 
@@ -27,6 +45,8 @@ const UploadFiles = ({ contractInstance, account }) => {
     } catch (error) {
       console.error("Error uploading record:", error);
       setMessage('Error uploading record. See console for details.');
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -46,13 +66,12 @@ const UploadFiles = ({ contractInstance, account }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen " style={{
+    <div className="flex justify-center items-center h-screen" style={{
       backgroundImage: `url(${homeImage})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       height: '657px',
-      }}>
-      
+    }}>
       <div className="bg-gray-800 p-10 rounded-lg shadow-lg w-3/4 max-w-9xl flex">
         <div className="w-3/5 pr-5">
           <h2 className="text-2xl font-bold text-center mb-5 text-white">Upload Health Records</h2>
@@ -127,6 +146,13 @@ const UploadFiles = ({ contractInstance, account }) => {
           </button>
         </div>
       </div>
+
+      {/* Loading Popup */}
+      {loading && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="text-white text-lg">Uploading...</div>
+        </div>
+      )}
     </div>
   );
 };

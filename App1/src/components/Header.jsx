@@ -17,6 +17,12 @@ const Header = ({ connectWallet, disconnectWallet, account, setActiveSection, ac
         >
           Upload File
         </button>
+
+        <button
+          className={`text-white mx-2 ${activeSection ==='retreive' ? 'underline' : ''}`}
+          onClick={() => setActiveSection('retireve')}
+          >
+        </button>
         <button
           className={`text-white mx-2 ${activeSection === 'transfer' ? 'underline' : ''}`}
           onClick={() => setActiveSection('transfer')}

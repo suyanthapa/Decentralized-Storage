@@ -75,6 +75,7 @@ function App() {
       <div >
         {activeSection === 'home' && <Homepage />}
         {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} />}
+        {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} /> }
         {activeSection === 'transfer' && (
           <div>
             <SendMoney contractInstance={contractInstance} />
