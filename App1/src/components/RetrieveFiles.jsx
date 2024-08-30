@@ -24,8 +24,10 @@ const RetrieveFiles = ({ contractInstance, account }) => {
       const record = await contractInstance.getRecord(recordId);
       const [uploader, hospital, fileHash] = record;
 
-      // Fetch the file from IPFS using the fileHash
-      const fileUrl = `https://olive-gigantic-albatross-774.mypinata.cloud/ipfs/QmVFDTys3wHHybpXQ3TLKoutXbfnvYuSN336DPYVhdVhgx`;
+      console.log(record);
+
+      // Construct the IPFS URL using the fileHash
+      const fileUrl = `https:/fuchsia-realistic-rattlesnake-554.mypinata.cloud/ipfs/${fileHash}`;
       setFileInfo({ uploader, hospital, fileUrl });
 
       setMessage('File retrieved successfully!');
@@ -69,7 +71,12 @@ const RetrieveFiles = ({ contractInstance, account }) => {
           <p><strong>File URL:</strong> <a href={fileInfo.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">{fileInfo.fileUrl}</a></p>
           <div className="mt-5">
             <h4 className="text-lg font-bold mb-2">File Preview:</h4>
-            <iframe src={fileInfo.fileUrl} width="100%" height="400px" title="File Preview" className="border border-gray-700 rounded-lg" />
+            <img
+              src={fileInfo.fileUrl}
+              alt="File Preview"
+              className="border border-gray-700 rounded-lg"
+              style={{ maxWidth: '100%', height: 'auto' }}
+            />
           </div>
         </div>
       )}

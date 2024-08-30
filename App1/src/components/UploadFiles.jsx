@@ -25,18 +25,23 @@ const UploadFiles = ({ contractInstance, account }) => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const pinataFile = await axios({
+      const response = await axios({
         method: "post",
         url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
         data: formData,
         headers: {
-          pinata_api_key: '3be859278a67509a7170',
-          pinata_secret_api_key: '56e431e9bf7748944ee97fa8de26d9a409769982cfb1822f63c531975785946a',
+          pinata_api_key: '0ce134a6f820a2671774',
+          pinata_secret_api_key: '1b7b42c773eb6a17c85bf82172a7925fc0934b08d25d2d77c84f7369eff420fe',
           "Content-Type": "multipart/form-data",
         },
       });
+       
+      const fileHash = response.data.IpfsHash;
+      console.log(fileHash);
 
-      const fileHash = `ipfs://${pinataFile.data.IpfsHash}`;
+      // const fileHash = `ipfs://${pinataFile.data.IpfsHash}`;
+
+      // console.log(fileHash);
 
       const tx = await contractInstance.uploadRecord(hospital, fileHash);
       await tx.wait();
