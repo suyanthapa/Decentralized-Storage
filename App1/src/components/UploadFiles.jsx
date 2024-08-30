@@ -71,12 +71,7 @@ const UploadFiles = ({ contractInstance, account }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen" style={{
-      backgroundImage: `url(${homeImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      height: '657px',
-    }}>
+    <div className="flex justify-center items-center h-screen  bg-gray-900" >
       <div className="bg-gray-800 p-10 rounded-lg shadow-lg w-3/4 max-w-9xl flex">
         <div className="w-3/5 pr-5">
           <h2 className="text-2xl font-bold text-center mb-5 text-white">Upload Health Records</h2>
@@ -122,34 +117,7 @@ const UploadFiles = ({ contractInstance, account }) => {
             </button>
           </form>
         </div>
-        <div className="w-2/5 pl-5 bg-gray-700 p-5 rounded-lg">
-          <h2 className="text-2xl font-bold text-center mb-5 text-white">Share Access</h2>
-          {addresses.map((address, index) => (
-            <div key={index} className="flex items-center mb-2">
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => handleAddressChange(index, e.target.value)}
-                placeholder="Recipient Address"
-                className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-800 text-white"
-              />
-              <button
-                type="button"
-                onClick={() => handleRemoveAddress(index)}
-                className="ml-2 bg-red-600 text-white p-2 rounded hover:bg-red-700"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddAddress}
-            className="w-full bg-green-600 text-white p-2 rounded mt-3 hover:bg-green-700"
-          >
-            Add Address
-          </button>
-        </div>
+        
       </div>
 
       {/* Loading Popup */}

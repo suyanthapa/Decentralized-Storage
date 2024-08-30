@@ -64,24 +64,25 @@ function App() {
   };
 
   return (
-    <div className="bg-cyan-800 min-h-screen">
-      <Header
-        connectWallet={connectWallet}
-        disconnectWallet={disconnectWallet}
-        account={account}
-        setActiveSection={setActiveSection}
-        activeSection={activeSection}
-      />
+    <div className="min-h-screen flex">  {/* Flex container for the sidebar and content */}
+    <Header
+      connectWallet={connectWallet}
+      disconnectWallet={disconnectWallet}
+      account={account}
+      setActiveSection={setActiveSection}
+      activeSection={activeSection}
+    />
 
-      <div >
-        {activeSection === 'home' && <Homepage />}
-        {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} />}
-        {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} /> }
-        {activeSection === 'transfer' && (
-          <div>
-            <SendMoney contractInstance={contractInstance} />
-            <TransactionList transactions={transactions} />
-          </div>
+
+<div className="flex-grow  ml-64">  {/* Main content area */}
+      {activeSection === 'home' && <Homepage />}
+      {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} />}
+      {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} />}
+      {activeSection === 'transfer' && (
+        <div>
+          <SendMoney contractInstance={contractInstance} />
+          <TransactionList transactions={transactions} />
+        </div>
         )}
       </div>
     </div>

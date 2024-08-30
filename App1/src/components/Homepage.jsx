@@ -9,7 +9,7 @@ const Homepage = () => {
         backgroundImage: `url(${homeImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '657px',
+        height: '779px',
       }}
     >
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50">
