@@ -1,17 +1,34 @@
 import axios from "axios";
 import React, { useState } from 'react';
 import homeImage from '../assets/home.jpg';
+import { Extension } from "typescript";
 
-const UploadFiles = ({ contractInstance, account }) => {
+const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetails}) => {
   const [hospital, setHospital] = useState('');
   const [addresses, setAddresses] = useState(['']);
   const [file, setFile] = useState(null);
+  const [fileType, setFileType] = useState('');
+  const [fileExtension, setFileExtension] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const fileName = selectedFile.name;
+      const extension = fileName.split('.').pop(); // Gets the extension
+      setFileType(selectedFile.type);
+      setFileExtension(extension);
+
+      addFileDetails({
+        name: fileName,
+        type: selectedFile.type,
+        extension: extension
+      });
+    }
   };
+
 
   const handleUpload = async () => {
     if (!account || !hospital || !file || addresses.length === 0) {
@@ -45,8 +62,10 @@ const UploadFiles = ({ contractInstance, account }) => {
 
       const tx = await contractInstance.uploadRecord(hospital, fileHash);
       await tx.wait();
-
+      
       setMessage('Record uploaded successfully!');
+      
+      addHospitalName(hospital);
     } catch (error) {
       console.error("Error uploading record:", error);
       setMessage('Error uploading record. See console for details.');

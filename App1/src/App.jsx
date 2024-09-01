@@ -6,13 +6,16 @@ import SendMoney from "./components/SendMoney";
 import TransactionList from "./components/TransactionList";
 import UploadFiles from "./components/UploadFiles";
 import RetrieveFiles from "./components/RetrieveFiles";
-import Homepage from "./components/Homepage";
+import Homepage from "./components/HomePage";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const [account, setAccount] = useState(null);
   const [contractInstance, setContractInstance] = useState(null);
   const [transactions, setTransactions] = useState([]);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection , setActiveSection] = useState('home');
+  const[hospitalNames, setHospitalNames] = useState([]);
+  const [fileDetails, setFileDetails] = useState([]);
 
   const contractAddress = "0x693Fe8f08b40E35Dd6e4B836Acc4D7056ed278CC";
 
@@ -63,6 +66,14 @@ function App() {
     setTransactions([]);
   };
 
+  const addHospitalName = (name) =>{
+    setHospitalNames(prevNames => [...prevNames, name]);
+  } ;
+
+  const addFileDetails= (details) =>{
+    setFileDetails(prevDetails=> [...prevDetails, details]);
+  };
+
   return (
     <div className="min-h-screen flex">  {/* Flex container for the sidebar and content */}
     <Header
@@ -76,7 +87,8 @@ function App() {
 
 <div className="flex-grow  ml-64">  {/* Main content area */}
       {activeSection === 'home' && <Homepage />}
-      {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} />}
+      {activeSection === 'dashboard' && <Dashboard hospitalNames = {hospitalNames} fileDetails= {fileDetails}/>}
+      {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance}  addHospitalName={addHospitalName} addFileDetails={addFileDetails}/>}
       {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} />}
       {activeSection === 'transfer' && (
         <div>
