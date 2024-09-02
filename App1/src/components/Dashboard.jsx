@@ -1,39 +1,60 @@
-import React from 'react'
+import React from 'react';
+import jpg from "../assets/jpg.png"; // Path to your JPG icon
+import png from "../assets/png.png"; // Path to your PNG icon
+import dicon from "../assets/dicon.png"; // Default icon for other file types
 
-const Dashboard = ({hospitalNames , fileDetails}) => {
+const Dashboard = ({ hospitalNames, fileDetails }) => {
+  const getFileTypeLabel = (extension) => {
+    if (['jpg', 'jpeg', 'png'].includes(extension.toLowerCase())) {
+      return 'Image';
+    }
+    return extension.toUpperCase();
+  };
+
+  const getFileIcon = (extension) => {
+    switch (extension.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+        return jpg;
+      case 'png':
+        return png;
+      default:
+        return dicon;
+    }
+  };
+
   return (
-    <div className='bg-gray-700 h-screen text-white pl-8 '>
-     
-      <h2 className='text-xl font-bold  pt-8 pb-5'>Recent Files</h2>
-      <table
-      className=' bg-gray-200 w-1/2 rounded-lg  text-black'>
+    <div className='bg-gray-700 h-screen text-white pl-8'>
+      <h2 className='text-xl font-bold pt-8 pb-5'>Recent Files</h2>
+      <table className='bg-gray-200 w-1/2 rounded-lg text-black'>
         <thead>
           <tr className='text-left'>
             <th>Hospital</th>
-            <th>File Name</th>
-            <th>File Type</th> 
-            <th>Created on</th>
-            <th>Size</th>
+            <th>File</th>
+            <th>File Type</th>
+            <th>Uploaded on</th>
           </tr>
         </thead>
         <tbody>
-          {fileDetails.map((details,index)=>(
+          {fileDetails.map((details, index) => (
             <tr key={index}>
               <td>{hospitalNames[index] || 'N/A'}</td>
               <td>{details.name}</td>
-              <td>{details.extension}</td>
-              <td>Jan 11, 2024</td>
-              <td>1mb</td>
+              <td className='flex items-center'>
+                <img
+                  src={getFileIcon(details.extension)}
+                  alt="File Type Icon"
+                  className='w-6 h-6 mr-2'
+                />
+                {getFileTypeLabel(details.extension)}
+              </td>
+              <td>{details.date}</td>
             </tr>
           ))}
         </tbody>
-
       </table>
-        
-      
-      
     </div>
-  )
-}
+  );
+};
 
 export default Dashboard;

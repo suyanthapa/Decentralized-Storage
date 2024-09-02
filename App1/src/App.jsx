@@ -17,7 +17,7 @@ function App() {
   const[hospitalNames, setHospitalNames] = useState([]);
   const [fileDetails, setFileDetails] = useState([]);
 
-  const contractAddress = "0x693Fe8f08b40E35Dd6e4B836Acc4D7056ed278CC";
+  const contractAddress = "0x6780f340A4faf9aa6758CE0C7592689620C1Ac88";
 
   const initializeContract = async (account) => {
     if (window.ethereum) {

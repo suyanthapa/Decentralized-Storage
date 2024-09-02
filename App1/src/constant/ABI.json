@@ -56,6 +56,12 @@
 				"internalType": "string",
 				"name": "fileHash",
 				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "date",
+				"type": "string"
 			}
 		],
 		"name": "RecordUploaded",
@@ -85,6 +91,11 @@
 				"internalType": "string",
 				"name": "_fileHash",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
 			}
 		],
 		"name": "uploadRecord",
@@ -106,6 +117,11 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			},
 			{
 				"internalType": "string",
@@ -157,6 +173,11 @@
 			{
 				"internalType": "string",
 				"name": "fileHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "date",
 				"type": "string"
 			}
 		],

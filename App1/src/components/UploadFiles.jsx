@@ -1,14 +1,11 @@
 import axios from "axios";
 import React, { useState } from 'react';
 import homeImage from '../assets/home.jpg';
-import { Extension } from "typescript";
 
-const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetails}) => {
+const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetails }) => {
   const [hospital, setHospital] = useState('');
-  const [addresses, setAddresses] = useState(['']);
   const [file, setFile] = useState(null);
-  const [fileType, setFileType] = useState('');
-  const [fileExtension, setFileExtension] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Default to current date
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
 
@@ -16,22 +13,11 @@ const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetai
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      const fileName = selectedFile.name;
-      const extension = fileName.split('.').pop(); // Gets the extension
-      setFileType(selectedFile.type);
-      setFileExtension(extension);
-
-      addFileDetails({
-        name: fileName,
-        type: selectedFile.type,
-        extension: extension
-      });
     }
   };
 
-
   const handleUpload = async () => {
-    if (!account || !hospital || !file || addresses.length === 0) {
+    if (!account || !hospital || !file) {
       setMessage('Please fill in all the fields.');
       return;
     }
@@ -52,19 +38,21 @@ const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetai
           "Content-Type": "multipart/form-data",
         },
       });
-       
+
       const fileHash = response.data.IpfsHash;
       console.log(fileHash);
 
-      // const fileHash = `ipfs://${pinataFile.data.IpfsHash}`;
-
-      // console.log(fileHash);
-
-      const tx = await contractInstance.uploadRecord(hospital, fileHash);
+      const tx = await contractInstance.uploadRecord(hospital, fileHash, date);
       await tx.wait();
-      
+
+      // Successfully uploaded, now update Dashboard
       setMessage('Record uploaded successfully!');
-      
+      addFileDetails({
+        name: file.name,
+        type: file.type,
+        extension: file.name.split('.').pop(),
+        date: date
+      });
       addHospitalName(hospital);
     } catch (error) {
       console.error("Error uploading record:", error);
@@ -74,25 +62,10 @@ const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetai
     }
   };
 
-  const handleAddAddress = () => {
-    setAddresses([...addresses, '']);
-  };
-
-  const handleAddressChange = (index, value) => {
-    const newAddresses = [...addresses];
-    newAddresses[index] = value;
-    setAddresses(newAddresses);
-  };
-
-  const handleRemoveAddress = (index) => {
-    const newAddresses = addresses.filter((_, i) => i !== index);
-    setAddresses(newAddresses);
-  };
-
   return (
-    <div className="flex justify-center items-center h-screen  bg-gray-900" >
+    <div className="flex justify-center items-center h-screen bg-gray-900">
       <div className="bg-gray-800 p-10 rounded-lg shadow-lg w-3/4 max-w-9xl flex">
-        <div className="w-3/5 pr-5">
+        <div className="w-full pr-5">
           <h2 className="text-2xl font-bold text-center mb-5 text-white">Upload Health Records</h2>
           <form className="space-y-5">
             <div>
@@ -105,11 +78,22 @@ const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetai
               />
             </div>
             <div>
+              <label className="block text-white">Date:</label>
+              <input
+                type="date"
+                readOnly
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-700 text-white"
+              />
+            </div>
+            <div>
               <label className="block text-white">Hospital:</label>
               <input
                 type="text"
                 value={hospital}
-                onChange={(e) => setHospital(e.target.value)}
+                
+                 onChange={(e) => setHospital(e.target.value)}
                 placeholder="Enter hospital name"
                 className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-700 text-white"
               />
@@ -136,7 +120,6 @@ const UploadFiles = ({ contractInstance, account , addHospitalName, addFileDetai
             </button>
           </form>
         </div>
-        
       </div>
 
       {/* Loading Popup */}
