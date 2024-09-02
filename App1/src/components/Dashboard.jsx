@@ -2,11 +2,17 @@ import React from 'react';
 import jpg from "../assets/jpg.png"; // Path to your JPG icon
 import png from "../assets/png.png"; // Path to your PNG icon
 import dicon from "../assets/dicon.png"; // Default icon for other file types
+import pdf from "../assets/pdf.png";
+import pptx from "../assets/pptx.png";
 
 const Dashboard = ({ hospitalNames, fileDetails }) => {
   const getFileTypeLabel = (extension) => {
     if (['jpg', 'jpeg', 'png'].includes(extension.toLowerCase())) {
       return 'Image';
+    }
+
+    if (['pdf', 'pptx'].includes(extension.toLowerCase())) {
+      return 'Document';
     }
     return extension.toUpperCase();
   };
@@ -18,6 +24,10 @@ const Dashboard = ({ hospitalNames, fileDetails }) => {
         return jpg;
       case 'png':
         return png;
+      case 'pdf':
+        return pdf; 
+        case 'pptx':
+          return pptx; 
       default:
         return dicon;
     }
