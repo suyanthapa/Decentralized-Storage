@@ -88,7 +88,7 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
               type="text"
               value={account}
               readOnly
-              className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300"
+              className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300  shadow-xl"
             />
           </div>
           <div>
