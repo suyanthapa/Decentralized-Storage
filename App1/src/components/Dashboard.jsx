@@ -4,6 +4,8 @@ import png from "../assets/png.png"; // Path to your PNG icon
 import dicon from "../assets/dicon.png"; // Default icon for other file types
 import pdf from "../assets/pdf.png";
 import pptx from "../assets/pptx.png";
+import { FaCloudUploadAlt, FaFolderOpen } from 'react-icons/fa';
+
 
 const Dashboard = ({ hospitalNames, fileDetails }) => {
   const getFileTypeLabel = (extension) => {
@@ -34,18 +36,25 @@ const Dashboard = ({ hospitalNames, fileDetails }) => {
   };
 
   return (
-    <div className='bg-gray-700 h-screen text-white pl-8'>
-      <h2 className='text-xl font-bold pt-8 pb-5'>Recent Files</h2>
-      <table className='bg-gray-200 w-1/2 rounded-lg text-black'>
-        <thead>
-          <tr className='text-left'>
-            <th>Hospital</th>
-            <th>File</th>
-            <th>File Type</th>
-            <th>Uploaded on</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="flex-1 p-6 h-screen bg-gray-100">
+      
+      
+     
+      <div className="flex justify-between mb-4">
+        <h2 className="text-xl font-bold">Recent Files</h2>
+        <a href="#" className="text-blue-500">View all</a>
+      </div>
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <table className="w-full">
+          <thead className="border-b-2">
+            <tr>
+              <th className="text-left p-3">Hospital's Name</th>
+              <th className="text-left p-3">File Name</th>
+              <th className="text-left p-3">File Type</th>
+              <th className="text-left p-3">Date</th>
+            </tr>
+          </thead>
+          <tbody>
           {fileDetails.map((details, index) => (
             <tr key={index}>
               <td>{hospitalNames[index] || 'N/A'}</td>
@@ -62,7 +71,8 @@ const Dashboard = ({ hospitalNames, fileDetails }) => {
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 };

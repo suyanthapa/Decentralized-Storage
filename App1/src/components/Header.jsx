@@ -25,7 +25,7 @@ const Header =({ connectWallet, disconnectWallet, account, setActiveSection, act
                href="#" 
                className={`flex items-center  space-x-4 hover:bg-purple-950 pl-20 p-2 rounded w-full text-center  ${activeSection === 'dashboard' ? 'bg-purple-900' : 'hover:bg-gray-700' }`}
                onClick={() => setActiveSection('dashboard')}
-            >
+                           >
               <img src={home} alt="Home Icon" className='h-5 w-auto '/>
               <span>Dashboard</span>
             </a>
