@@ -4,37 +4,6 @@
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "timestamp",
-				"type": "uint256"
-			}
-		],
-		"name": "MoneySent",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
 				"internalType": "uint256",
 				"name": "recordId",
 				"type": "uint256"
@@ -54,7 +23,13 @@
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "fileHash",
+				"name": "fileName",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "fileType",
 				"type": "string"
 			},
 			{
@@ -62,23 +37,16 @@
 				"internalType": "string",
 				"name": "date",
 				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "fileHash",
+				"type": "string"
 			}
 		],
 		"name": "RecordUploaded",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address payable",
-				"name": "_to",
-				"type": "address"
-			}
-		],
-		"name": "sendMoney",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -89,18 +57,79 @@
 			},
 			{
 				"internalType": "string",
-				"name": "_fileHash",
+				"name": "_fileName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_fileType",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
 				"name": "_date",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_fileHash",
+				"type": "string"
 			}
 		],
 		"name": "uploadRecord",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "getRecentRecords",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "uploader",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "hospital",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileType",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileHash",
+						"type": "string"
+					}
+				],
+				"internalType": "struct ChangeName.Record[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -117,11 +146,6 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			},
 			{
 				"internalType": "string",
@@ -172,12 +196,22 @@
 			},
 			{
 				"internalType": "string",
-				"name": "fileHash",
+				"name": "fileName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "fileType",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
 				"name": "date",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "fileHash",
 				"type": "string"
 			}
 		],

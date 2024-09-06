@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 
 const RetrieveFiles = ({ contractInstance, account }) => {
   const [recordId, setRecordId] = useState('');
   const [fileInfo, setFileInfo] = useState(null);
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
   const handleRetrieve = async () => {
     if (!recordId) {
@@ -27,9 +26,14 @@ const RetrieveFiles = ({ contractInstance, account }) => {
 
       console.log(record);
 
-      // Construct the IPFS URL using the fileHash
-      const fileUrl = `https:/fuchsia-realistic-rattlesnake-554.mypinata.cloud/ipfs/${fileHash}`;
-      setFileInfo({ uploader, hospital, fileUrl });
+      // Correct the URL format
+      const fileUrl = `https://fuchsia-realistic-rattlesnake-554.mypinata.cloud/ipfs/${fileHash}`;
+
+      // Optional: Fetch file metadata to determine content type
+      const response = await fetch(fileUrl, { method: 'HEAD' });
+      const contentType = response.headers.get('Content-Type');
+
+      setFileInfo({ uploader, hospital, fileUrl, contentType });
 
       setMessage('File retrieved successfully!');
     } catch (error) {
@@ -63,7 +67,6 @@ const RetrieveFiles = ({ contractInstance, account }) => {
 
       {message && <div className="text-red-500 mb-5">{message}</div>}
 
-      {/* Display file details and content */}
       {fileInfo && (
         <div className="bg-gray-800 p-5 rounded-lg shadow-lg w-3/4 max-w-2xl">
           <h3 className="text-xl font-bold mb-2">File Details:</h3>
@@ -72,17 +75,20 @@ const RetrieveFiles = ({ contractInstance, account }) => {
           <p><strong>File URL:</strong> <a href={fileInfo.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">{fileInfo.fileUrl}</a></p>
           <div className="mt-5">
             <h4 className="text-lg font-bold mb-2">File Preview:</h4>
-            <img
-              src={fileInfo.fileUrl}
-              alt="File Preview"
-              className="border border-gray-700 rounded-lg"
-              style={{ maxWidth: '100%', height: 'auto' }}
-            />
+            {fileInfo.contentType && fileInfo.contentType.startsWith('image/') ? (
+              <img
+                src={fileInfo.fileUrl}
+                alt="File Preview"
+                className="border border-gray-700 rounded-lg"
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
+            ) : (
+              <p>No preview available for this file type.</p>
+            )}
           </div>
         </div>
       )}
 
-      {/* Loading Popup */}
       {loading && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
           <div className="text-white text-lg">Retrieving...</div>

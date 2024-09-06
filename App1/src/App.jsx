@@ -17,7 +17,7 @@ function App() {
   const[hospitalNames, setHospitalNames] = useState([]);
   const [fileDetails, setFileDetails] = useState([]);
 
-  const contractAddress = "0x6780f340A4faf9aa6758CE0C7592689620C1Ac88";
+  const contractAddress = "0xCd7961f4B9676710A4DC397c61462DbEf1326913";
 
   const initializeContract = async (account) => {
     if (window.ethereum) {
@@ -85,16 +85,16 @@ function App() {
     />
 
 
-<div className="flex-grow  ml-64">  {/* Main content area */}
-      {activeSection === 'home' && <Homepage />}
-      {activeSection === 'dashboard' && <Dashboard hospitalNames = {hospitalNames} fileDetails= {fileDetails}/>}
-      {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance}  addHospitalName={addHospitalName} addFileDetails={addFileDetails}/>}
-      {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} />}
-      {activeSection === 'transfer' && (
-        <div>
-          <SendMoney contractInstance={contractInstance} />
-          <TransactionList transactions={transactions} />
-        </div>
+ <div className="flex-grow ml-64">
+        {activeSection === 'home' && <Homepage />}
+        {activeSection === 'dashboard' && <Dashboard hospitalNames={hospitalNames} fileDetails={fileDetails} contractInstance={contractInstance} />}
+        {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} addHospitalName={addHospitalName} addFileDetails={addFileDetails} />}
+        {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} />}
+        {activeSection === 'transfer' && (
+          <div>
+            <SendMoney contractInstance={contractInstance} />
+            <TransactionList transactions={transactions} />
+          </div>
         )}
       </div>
     </div>

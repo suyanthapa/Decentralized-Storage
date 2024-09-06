@@ -29,16 +29,20 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
       setMessage('Please fill in all the fields.');
       return;
     }
-
+  
     setLoading(true); // Start loading
-
+  
     try {
+      console.log("Starting file upload...");
+  
       // Upload all files to IPFS and get their hashes
       const fileHashes = [];
       for (const file of files) {
+        console.log(`Uploading file: ${file.name}`);
+        
         const formData = new FormData();
         formData.append("file", file);
-
+  
         const response = await axios({
           method: "post",
           url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
@@ -49,17 +53,29 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
             "Content-Type": "multipart/form-data",
           },
         });
-
-        fileHashes.push(response.data.IpfsHash);
+  
+        console.log(`File uploaded to IPFS. Hash: ${response.data.IpfsHash}`);
+        
+        fileHashes.push({
+          ipfsHash: response.data.IpfsHash,
+          fileName: file.name.split('.').slice(0, -1).join('.'), // Extract file name without extension
+          fileType: file.name.split('.').pop(), // Extract file extension
+        });
       }
-
-      // Upload all records to the blockchain
-      for (const fileHash of fileHashes) {
-        const tx = await contractInstance.uploadRecord(hospital, fileHash, date);
+  
+      console.log("Uploading records to the blockchain...");
+  
+      // Upload all records to the blockchain with file name, file type, hospital name, date, and file hash
+      for (const file of fileHashes) {
+        const { fileName, fileType, ipfsHash } = file;
+        console.log(`Uploading to blockchain: ${fileName}, ${fileType}, ${hospital}, ${date}, ${ipfsHash}`);
+        const tx = await contractInstance.uploadRecord(hospital, fileName, fileType, date, ipfsHash);
         await tx.wait();
       }
-
+  
       setMessage('Records uploaded successfully!');
+      console.log("All records uploaded successfully.");
+  
       files.forEach(file => {
         addFileDetails({
           name: file.name,
@@ -76,7 +92,7 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
       setLoading(false); // End loading
     }
   };
-
+  
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
       <div className="bg-gray-100 p-10 rounded-lg shadow-2xl w-3/4 max-w-9xl flex flex-col">
@@ -88,7 +104,7 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
               type="text"
               value={account}
               readOnly
-              className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300  shadow-xl"
+              className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300 shadow-xl"
             />
           </div>
           <div>
@@ -111,51 +127,50 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
               className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300"
             />
           </div>
-          <div> <label className="block">File:</label>
-         
-          <div
-            className="bg-white p-6 rounded-lg shadow-md mb-6 border-dashed border-2 border-gray-300"
-            onDrop={handleFileDrop}
-            onDragOver={(e) => e.preventDefault()}
-            onClick={() => document.getElementById('file-input').click()}
-          >
-            <FaCloudUploadAlt className="text-4xl text-blue-500 mb-2 mx-auto" />
-            <span className="text-center block">
-              Drag and drop files here, or <a href="#" className="text-blue-500">Browse</a>
-            </span>
-            <input
-              id="file-input"
-              type="file"
-              multiple
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </div>
-          {files.length > 0 && (
-            <div className="mb-4">
-              <label className="block">Selected Files:</label>
-              <ul className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300">
-                {files.map((file, index) => (
-                  <li key={index} className="flex justify-between items-center py-1 px-2">
-                    <span>{file.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleFileRemove(file)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
+          <div> 
+            <label className="block">File:</label>
+            <div
+              className="bg-white p-6 rounded-lg shadow-md mb-6 border-dashed border-2 border-gray-300"
+              onDrop={handleFileDrop}
+              onDragOver={(e) => e.preventDefault()}
+              onClick={() => document.getElementById('file-input').click()}
+            >
+              <FaCloudUploadAlt className="text-4xl text-blue-500 mb-2 mx-auto" />
+              <span className="text-center block">
+                Drag and drop files here, or <a href="#" className="text-blue-500">Browse</a>
+              </span>
+              <input
+                id="file-input"
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                className="hidden"
+              />
             </div>
-            
-          )}
-          {message && (
-            <div className="text-red-500 text-center">
-              {message}
-            </div>
-          )}
+            {files.length > 0 && (
+              <div className="mb-4">
+                <label className="block">Selected Files:</label>
+                <ul className="w-full p-2 border border-gray-600 rounded mt-1 bg-gray-300">
+                  {files.map((file, index) => (
+                    <li key={index} className="flex justify-between items-center py-1 px-2">
+                      <span>{file.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleFileRemove(file)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {message && (
+              <div className="text-red-500 text-center">
+                {message}
+              </div>
+            )}
           </div>
           <button
             type="button"
@@ -166,7 +181,7 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
           </button>
         </form>
       </div>
-
+  
       {loading && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
           <div className="text-white text-lg">Uploading...</div>
