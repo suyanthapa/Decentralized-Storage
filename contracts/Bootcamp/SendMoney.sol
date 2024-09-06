@@ -1,59 +1,75 @@
 // SPDX-License-Identifier: MIT
-pragma solidity^0.8.8;
+pragma solidity ^0.8.8;
 
-contract ChangeName{
-    // string myName= " Suyan Thapa";
+contract ChangeName {
 
-    // function setName(string memory _name) public{
-    //     myName=_name;
-    // }
+    // Event to log record uploads
+    event RecordUploaded(
+        uint256 indexed recordId,
+        address indexed uploader,
+        string hospital,
+        string fileName,       // File name without extension
+        string fileType,       // File extension (type)
+        string date,
+        string fileHash
+    );
 
-    // function getName() public view returns( string memory){
-    //     return myName;
-    // }
-
-    // Event to log the transaction details
-    event MoneySent(address indexed from, address indexed to, uint256 amount, uint256 timestamp);
-
-    // Function to send money to a desired address
-    function sendMoney(address payable _to) external payable {
-        require(msg.value > 0, "Send some ETH"); // Require at least some ETH to be sent
-        _to.transfer(msg.value); // Transfer the received ETH to the specified address
-        emit MoneySent(msg.sender, _to, msg.value, block.timestamp); // Emit an event for the transaction
-    }
-
-
-//for uploading files into blockchian
     struct Record {
         address uploader;
         string hospital;
+        string fileName;      // File name without extension
+        string fileType;      // File extension (type)
+        string date;
         string fileHash;
     }
 
     mapping(uint256 => Record) public records;
     uint256 public recordCount;
 
-    event RecordUploaded(
-        uint256 indexed recordId,
-        address indexed uploader,
-        string hospital,
-        string fileHash
-    );
-
-    function uploadRecord(string memory _hospital, string memory _fileHash) public {
+    // Function to upload a record
+    function uploadRecord(
+        string memory _hospital,
+        string memory _fileName,    // New field for file name without extension
+        string memory _fileType,    // New field for file extension (type)
+        string memory _date,
+        string memory _fileHash
+    ) 
+        public 
+    {
         require(bytes(_hospital).length > 0, "Hospital name is required");
+        require(bytes(_fileName).length > 0, "File name is required"); // Require file name
+        require(bytes(_fileType).length > 0, "File type is required"); // Require file type
+        require(bytes(_date).length > 0, "Date is required");
         require(bytes(_fileHash).length > 0, "File hash is required");
 
         recordCount++;
-        records[recordCount] = Record(msg.sender, _hospital, _fileHash);
+        records[recordCount] = Record(msg.sender, _hospital, _fileName, _fileType, _date, _fileHash);
 
-        emit RecordUploaded(recordCount, msg.sender, _hospital, _fileHash);
+        emit RecordUploaded(recordCount, msg.sender, _hospital, _fileName, _fileType, _date, _fileHash);
     }
 
+    // Function to get a record by its ID
     function getRecord(uint256 _recordId) public view returns (address, string memory, string memory) {
         Record memory record = records[_recordId];
         return (record.uploader, record.hospital, record.fileHash);
     }
 
- }
+ 
 
+    // Function to retrieve recent files
+    function getRecentRecords(uint256 _count) public view returns (Record[] memory) {
+        require(_count > 0, "Count should be greater than 0");
+        uint256 startIndex = recordCount > _count ? recordCount - _count : 0;
+        uint256 resultCount = recordCount - startIndex;
+
+        Record[] memory recentRecords = new Record[](resultCount);
+        uint256 j = 0;
+
+        for (uint256 i = startIndex + 1; i <= recordCount; i++) {
+            recentRecords[j] = records[i];
+            j++;
+        }
+
+        return recentRecords;
+    }
+}
