@@ -8,13 +8,15 @@ import UploadFiles from "./components/UploadFiles";
 import RetrieveFiles from "./components/RetrieveFiles";
 import Homepage from "./components/HomePage";
 import Dashboard from "./components/Dashboard";
+import HelpSection from './components/HelpSection';
+import AboutSection from './components/AboutSection.jsx';
 
 function App() {
   const [account, setAccount] = useState(null);
   const [contractInstance, setContractInstance] = useState(null);
   const [transactions, setTransactions] = useState([]);
-  const [activeSection , setActiveSection] = useState('home');
-  const[hospitalNames, setHospitalNames] = useState([]);
+  const [activeSection, setActiveSection] = useState('home');
+  const [hospitalNames, setHospitalNames] = useState([]);
   const [fileDetails, setFileDetails] = useState([]);
 
   const contractAddress = "0xCd7961f4B9676710A4DC397c61462DbEf1326913";
@@ -66,30 +68,31 @@ function App() {
     setTransactions([]);
   };
 
-  const addHospitalName = (name) =>{
+  const addHospitalName = (name) => {
     setHospitalNames(prevNames => [...prevNames, name]);
-  } ;
+  };
 
-  const addFileDetails= (details) =>{
-    setFileDetails(prevDetails=> [...prevDetails, details]);
+  const addFileDetails = (details) => {
+    setFileDetails(prevDetails => [...prevDetails, details]);
   };
 
   return (
-    <div className="min-h-screen flex">  {/* Flex container for the sidebar and content */}
-    <Header
-      connectWallet={connectWallet}
-      disconnectWallet={disconnectWallet}
-      account={account}
-      setActiveSection={setActiveSection}
-      activeSection={activeSection}
-    />
+    <div className="min-h-screen flex">
+      <Header
+        connectWallet={connectWallet}
+        disconnectWallet={disconnectWallet}
+        account={account}
+        setActiveSection={setActiveSection}
+        activeSection={activeSection}
+      />
 
-
- <div className="flex-grow ml-64">
+      <div className="flex-grow ml-64">
         {activeSection === 'home' && <Homepage />}
         {activeSection === 'dashboard' && <Dashboard hospitalNames={hospitalNames} fileDetails={fileDetails} contractInstance={contractInstance} />}
         {activeSection === 'upload' && <UploadFiles account={account} contractInstance={contractInstance} addHospitalName={addHospitalName} addFileDetails={addFileDetails} />}
         {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} />}
+        {activeSection === 'help' && <HelpSection />}
+        {activeSection === 'about' && <AboutSection />}
         {activeSection === 'transfer' && (
           <div>
             <SendMoney contractInstance={contractInstance} />
