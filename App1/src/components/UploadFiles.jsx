@@ -39,7 +39,7 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
       const fileHashes = [];
       for (const file of files) {
         console.log(`Uploading file: ${file.name}`);
-        
+  
         const formData = new FormData();
         formData.append("file", file);
   
@@ -54,8 +54,12 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
           },
         });
   
+        if (response.status !== 200) {
+          throw new Error(`Failed to upload to IPFS: ${response.statusText}`);
+        }
+  
         console.log(`File uploaded to IPFS. Hash: ${response.data.IpfsHash}`);
-        
+  
         fileHashes.push({
           ipfsHash: response.data.IpfsHash,
           fileName: file.name.split('.').slice(0, -1).join('.'), // Extract file name without extension
@@ -65,7 +69,7 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
   
       console.log("Uploading records to the blockchain...");
   
-      // Upload all records to the blockchain with file name, file type, hospital name, date, and file hash
+      // Upload all records to the blockchain
       for (const file of fileHashes) {
         const { fileName, fileType, ipfsHash } = file;
         console.log(`Uploading to blockchain: ${fileName}, ${fileType}, ${hospital}, ${date}, ${ipfsHash}`);
@@ -90,8 +94,10 @@ const UploadFiles = ({ contractInstance, account, addHospitalName, addFileDetail
       setMessage('Error uploading records. See console for details.');
     } finally {
       setLoading(false); // End loading
+      console.log("Upload process finished.");
     }
   };
+  
   
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-black">

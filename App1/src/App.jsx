@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { ethers } from "ethers";
 import ABI from './constant/ABI.json';
 import Header from "./components/Header";
-import SendMoney from "./components/SendMoney";
-import TransactionList from "./components/TransactionList";
 import UploadFiles from "./components/UploadFiles";
 import RetrieveFiles from "./components/RetrieveFiles";
 import Homepage from "./components/HomePage";
@@ -14,12 +12,11 @@ import AboutSection from './components/AboutSection.jsx';
 function App() {
   const [account, setAccount] = useState(null);
   const [contractInstance, setContractInstance] = useState(null);
-  const [transactions, setTransactions] = useState([]);
   const [activeSection, setActiveSection] = useState('home');
   const [hospitalNames, setHospitalNames] = useState([]);
   const [fileDetails, setFileDetails] = useState([]);
 
-  const contractAddress = "0xCd7961f4B9676710A4DC397c61462DbEf1326913";
+  const contractAddress = "0x2e7E860Aa70B2Ab1Af0f021Bc461a17D1Cfa4F9B";
 
   const initializeContract = async (account) => {
     if (window.ethereum) {
@@ -29,17 +26,7 @@ function App() {
         const contract = new ethers.Contract(contractAddress, ABI, signer);
         setContractInstance(contract);
 
-        contract.on("MoneySent", (from, to, amount, timestamp) => {
-          setTransactions(prevTransactions => [
-            ...prevTransactions,
-            { 
-              from, 
-              to, 
-              amount: ethers.utils.formatEther(amount), 
-              timestamp: new Date(timestamp * 1000).toLocaleString() 
-            }
-          ]);
-        });
+       
       } catch (error) {
         console.error("Error initializing contract:", error);
       }
@@ -93,12 +80,7 @@ function App() {
         {activeSection === 'retrieve' && <RetrieveFiles account={account} contractInstance={contractInstance} />}
         {activeSection === 'help' && <HelpSection />}
         {activeSection === 'about' && <AboutSection />}
-        {activeSection === 'transfer' && (
-          <div>
-            <SendMoney contractInstance={contractInstance} />
-            <TransactionList transactions={transactions} />
-          </div>
-        )}
+       
       </div>
     </div>
   );
