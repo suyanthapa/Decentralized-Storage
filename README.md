@@ -10,4 +10,4 @@
 ![Upload File Screenshot](Design/uploadFiles.png)
 
 ## Retrieve File
-![Retrieve File Screenshot](Design/retrieveFiles.png)
+![Retrieve File Screenshot](Design/Retrieved%20Records%20through%20ID.png).png)
