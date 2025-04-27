@@ -66,8 +66,9 @@ const Header = ({ connectWallet, disconnectWallet, account, setActiveSection, ac
             </a>
           </nav>
 
-          <div className="text-white text-base flex justify-center mt-44 flex flex-col">
+          <div className="text-white text-base flex justify-center flex flex-col">
             <div>
+              
               <p className="flex justify-center">
                 Address: {account ? `${account.slice(0, 6)}.....${account.slice(-5)}` : "Not Connected"}
               </p>

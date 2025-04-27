@@ -4,7 +4,7 @@ import ABI from './constant/ABI.json';
 import Header from "./components/Header";
 import UploadFiles from "./components/UploadFiles";
 import RetrieveFiles from "./components/RetrieveFiles";
-import Homepage from "./components/HomePage";
+import Homepage from './components/Homepage.jsx'
 import Dashboard from "./components/Dashboard";
 import HelpSection from './components/HelpSection';
 import AboutSection from './components/AboutSection.jsx';
