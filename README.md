@@ -1,6 +1,6 @@
 ## 🧪 Demo
 
-You can view a live demo at: [https://decentralized-storage-pi.vercel.app/](https://decentralized-storage-pi.vercel.app/)
+You can view a live demo at: [Click here for the demo](https://decentralized-storage-pi.vercel.app/)
 
 
 
